@@ -4,6 +4,9 @@ import axios from "axios";
 // each Vuex instance is just a single state tree.
 const state = {
   payments: [],
+  types: [],
+  sources: [],
+  statuses: [],
 };
 
 // mutations are operations that actually mutate the state.
@@ -15,6 +18,15 @@ const mutations = {
   setPayments(state, payments) {
     state.payments = payments;
   },
+  setSources(state, sources) {
+    state.sources = sources;
+  },
+  setTypes(state, types) {
+    state.types = types;
+  },
+  setStatuses(state, statuses) {
+    state.statuses = statuses;
+  },
 };
 
 // actions are functions that cause side effects and can involve
@@ -24,6 +36,46 @@ const actions = {
     axios
       .get("https://tests.szapi.ru/ts14/public_html/payments")
       .then((response) => commit("setPayments", response.data));
+    axios
+      .get("https://tests.szapi.ru/ts14/public_html/form_tss")
+      .then((response) => {
+        commit("setSources", response.data.sources);
+        commit("setTypes", response.data.types);
+        commit("setStatuses", response.data.statuses);
+      });
+  },
+  filterByDate: ({ commit }, date) => {
+    console.log(date);
+    axios
+      .get(`https://tests.szapi.ru/ts14/public_html/payments?date=${date}`)
+      .then((response) => commit("setPayments", response.data));
+  },
+  filterBySourceId: ({ commit }, source_id) => {
+    console.log(source_id);
+    axios
+      .get(
+        `https://tests.szapi.ru/ts14/public_html/payments?source_id=${source_id}`
+      )
+      .then((response) => commit("setPayments", response.data));
+  },
+  filterPayments: ({ commit }, { date, source_id }) => {
+    if (date && source_id) {
+      axios
+        .get(
+          `https://tests.szapi.ru/ts14/public_html/payments?date=${date}&source_id=${source_id}`
+        )
+        .then((response) => commit("setPayments", response.data));
+    } else if (date) {
+      axios
+        .get(`https://tests.szapi.ru/ts14/public_html/payments?date=${date}`)
+        .then((response) => commit("setPayments", response.data));
+    } else if (source_id) {
+      axios
+        .get(
+          `https://tests.szapi.ru/ts14/public_html/payments?source_id=${source_id}`
+        )
+        .then((response) => commit("setPayments", response.data));
+    }
   },
 };
 
