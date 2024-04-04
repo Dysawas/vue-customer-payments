@@ -2,7 +2,7 @@
     <teleport to="#modal">
         <Transition name="fade">
             <div class="fixed z-10 w-full h-full overflow-auto bg-opacity-30 bg-black" v-if="isOpen" @click="close">
-                <div class="relative w-1/3	 top-40 m-auto p-5 bg-white border-2 border-solid"
+                <div class="relative xl:w-1/3 lg:w-1/2 md:w-3/5 sm:w-1/2 top-40 m-auto p-5 bg-white border-2 border-solid"
                     @click="e => e.stopPropagation()">
                     <div class="flex justify-between border-b-2 text-xl pb-4">
                         <h1 class="text-slate-800 font-semibold">Добавление нового платежа</h1>

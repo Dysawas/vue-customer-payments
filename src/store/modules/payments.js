@@ -50,20 +50,21 @@ const actions = {
         commit("setIsOpenModal")
       })
   },
-  getAllPaymentsAsync: ({ commit }) => {
-    axios
+  getAllPaymentsAsync: async ({ commit }) => {
+    await axios
+    .get("https://tests.szapi.ru/ts14/public_html/form_tss")
+    .then((response) => {
+      commit("setSources", response.data.sources);
+      commit("setTypes", response.data.types);
+      commit("setStatuses", response.data.statuses);
+    });
+    await axios
       .get("https://tests.szapi.ru/ts14/public_html/payments")
       .then((response) => commit("setPayments", response.data));
-    axios
-      .get("https://tests.szapi.ru/ts14/public_html/form_tss")
-      .then((response) => {
-        commit("setSources", response.data.sources);
-        commit("setTypes", response.data.types);
-        commit("setStatuses", response.data.statuses);
-      });
+   
   },
   filterPayments: ({ commit }, { date, source_id }) => {
-    if (date && source_id) {
+    if (date && source_id && source_id !== "0") {
       axios
         .get(
           `https://tests.szapi.ru/ts14/public_html/payments?date=${date}&source_id=${source_id}`
@@ -73,11 +74,15 @@ const actions = {
       axios
         .get(`https://tests.szapi.ru/ts14/public_html/payments?date=${date}`)
         .then((response) => commit("setPayments", response.data));
-    } else if (source_id) {
+    } else if (source_id && source_id !== "0") {
       axios
         .get(
           `https://tests.szapi.ru/ts14/public_html/payments?source_id=${source_id}`
         )
+        .then((response) => commit("setPayments", response.data));
+    } else {
+      axios
+        .get("https://tests.szapi.ru/ts14/public_html/payments")
         .then((response) => commit("setPayments", response.data));
     }
   },

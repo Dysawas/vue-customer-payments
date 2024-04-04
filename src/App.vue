@@ -1,6 +1,6 @@
 <template>
   <div class="container  mx-auto px-4">
-    <h1 class="text-xl font-semibold">Список платежей</h1>
+    <h1 class="text-xl font-semibold mb-3">Список платежей</h1>
     <Modal>
       <FormPayment />
     </Modal>

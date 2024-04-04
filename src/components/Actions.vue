@@ -1,5 +1,5 @@
 <template>
-    <button class="bg-blue-500 w-48 h-7	px-2 text-white" @click="openModal">Добавить платеж</button>
+    <button class="bg-blue-500 w-48 h-7	px-3 mb-3 text-white" @click="openModal">Добавить платеж</button>
     <div class="flex ">
         <div class="mx-3">
             <label class="block">Дата платежа</label>

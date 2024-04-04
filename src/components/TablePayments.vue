@@ -18,7 +18,7 @@
                 <td>{{ types.find(t => t.id === payment.type_id).title }}</td>
                 <td>{{ new Date(payment.date).toLocaleDateString() }}</td>
                 <td>{{ payment.summ }}</td>
-                <td>{{ sources.find(s => s.id === payment.source_id).title }}</td>
+                <td>{{ payment.source_id > 0 ? sources.find(s => s.id === payment.source_id).title : "-"}}</td>
                 <td>
                     <span class="text-white p-1 " :class="[getStatusColor(payment)]">
                         {{ statuses.find(status => status.id === payment.status_id).title }}
