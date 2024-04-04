@@ -7,6 +7,7 @@ const state = {
   types: [],
   sources: [],
   statuses: [],
+  isOpenModal: false
 };
 
 // mutations are operations that actually mutate the state.
@@ -27,11 +28,28 @@ const mutations = {
   setStatuses(state, statuses) {
     state.statuses = statuses;
   },
+  setIsOpenModal(state) {
+    state.isOpenModal = !state.isOpenModal
+  },
+  addPayment(state, payment) {
+    state.payments.push(payment)
+  }
 };
 
 // actions are functions that cause side effects and can involve
 // asynchronous operations.
 const actions = {
+  postPayment: ({ commit }, payment) => {
+    axios.post(" https://tests.szapi.ru/ts14/public_html/payments", { ...payment }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        commit("addPayment", response.data)
+        commit("setIsOpenModal")
+      })
+  },
   getAllPaymentsAsync: ({ commit }) => {
     axios
       .get("https://tests.szapi.ru/ts14/public_html/payments")
@@ -43,20 +61,6 @@ const actions = {
         commit("setTypes", response.data.types);
         commit("setStatuses", response.data.statuses);
       });
-  },
-  filterByDate: ({ commit }, date) => {
-    console.log(date);
-    axios
-      .get(`https://tests.szapi.ru/ts14/public_html/payments?date=${date}`)
-      .then((response) => commit("setPayments", response.data));
-  },
-  filterBySourceId: ({ commit }, source_id) => {
-    console.log(source_id);
-    axios
-      .get(
-        `https://tests.szapi.ru/ts14/public_html/payments?source_id=${source_id}`
-      )
-      .then((response) => commit("setPayments", response.data));
   },
   filterPayments: ({ commit }, { date, source_id }) => {
     if (date && source_id) {
